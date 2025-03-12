@@ -5,10 +5,6 @@ import requests
 import os
 import time
 
-# -------------------------------
-# 原始逻辑函数（增加 url 参数）
-# -------------------------------
-
 DEFAULT_SILICONFLOW_URL = "https://api.siliconflow.cn/v1/chat/completions"
 DEFAULT_OLLAMA_URL = "http://localhost:11434/api/generate"
 DEFAULT_PROMPT = r"你精通错别字修改和文法语法，后面的内容中，如果有错别字，请将错别字按照`a 应为 b`的格式进行罗列，如果有不当的词汇，请将不当用词按照`...看起来奇怪`进行罗列，如果有病句，指明按照`...疑似病句，病因是...`进行罗列，如果没有问题，请回答`no problem at all`，不要做其他回答："
@@ -49,7 +45,7 @@ def check_with_ollama(prompt, model_name, url=DEFAULT_OLLAMA_URL):
         "prompt": prompt,
         "stream": False,
         "options": {
-            "num_thread": 32
+            "num_thread": int(os.cpu_count() / 2)
         }
     }
     response = requests.post(url, json=payload)
